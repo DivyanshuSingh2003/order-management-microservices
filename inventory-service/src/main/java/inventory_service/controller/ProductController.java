@@ -2,6 +2,7 @@ package inventory_service.controller;
 
 import inventory_service.dto.ProductRequest;
 import inventory_service.dto.ProductResponse;
+import inventory_service.dto.StockAdjustRequest;
 import inventory_service.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,10 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ProductResponse adjustStock(@PathVariable Long id, @Valid @RequestBody StockAdjustRequest request) {
+        return service.adjustStock(id, request);
     }
 }

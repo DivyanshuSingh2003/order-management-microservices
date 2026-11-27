@@ -2,8 +2,10 @@ package inventory_service.service.impl;
 
 import inventory_service.dto.ProductRequest;
 import inventory_service.dto.ProductResponse;
+import inventory_service.dto.StockAdjustRequest;
 import inventory_service.entity.Product;
 import inventory_service.exception.DuplicateResourceException;
+import inventory_service.exception.InsufficientStockException;
 import inventory_service.exception.ResourceNotFoundException;
 import inventory_service.repository.ProductRepository;
 import inventory_service.service.ProductService;
@@ -73,5 +75,17 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductResponse toResponse(Product p) {
         return new ProductResponse(p.getId(), p.getSku(), p.getName(), p.getPrice(), p.getQuantity());
+    }
+
+    @Override
+    public ProductResponse adjustStock(Long id, StockAdjustRequest request) {
+        Product product = findOrThrow(id);
+        int newQuantity = product.getQuantity() + request.delta();
+        if (newQuantity < 0) {
+            throw new InsufficientStockException(
+                    "Insufficient stock for product " + id + ": available " + product.getQuantity());
+        }
+        product.setQuantity(newQuantity);
+        return toResponse(repository.save(product));
     }
 }

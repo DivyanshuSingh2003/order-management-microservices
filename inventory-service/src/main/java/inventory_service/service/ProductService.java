@@ -2,6 +2,7 @@ package inventory_service.service;
 
 import inventory_service.dto.ProductRequest;
 import inventory_service.dto.ProductResponse;
+import inventory_service.dto.StockAdjustRequest;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface ProductService {
     ProductResponse getById(Long id);
     ProductResponse update(Long id, ProductRequest request);
     void delete(Long id);
+    ProductResponse adjustStock(Long id, StockAdjustRequest request);
 }

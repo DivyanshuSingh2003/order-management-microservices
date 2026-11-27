@@ -23,6 +23,9 @@ public class Product {
     @Column(nullable = false)
     private int quantity;
 
+    @Version
+    private long version;
+
     public Long getId() { return id; }
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
